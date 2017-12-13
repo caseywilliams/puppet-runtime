@@ -4,7 +4,7 @@ component "ruby-augeas" do |pkg, settings, platform|
   pkg.url "http://download.augeas.net/ruby/ruby-augeas-#{pkg.get_version}.tgz"
   pkg.mirror "#{settings[:buildsources_url]}/ruby-augeas-#{pkg.get_version}.tar.gz"
 
-  # pkg.replaces 'pe-ruby-augeas'
+  pkg.replaces 'pe-ruby-augeas' if settings[:runtime_project] == 'agent'
 
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires "augeas"
