@@ -146,30 +146,31 @@ component 'openssl' do |pkg, settings, platform|
     'enable-rfc3779',
     'enable-tlsext',
     'no-camellia',
+    'no-ec2m',
+    'no-gost',
     'no-md2',
     'no-mdc2',
-    'no-ec2m',
+    'no-rc5',
     'no-ssl2',
     'no-ssl3',
   ]
 
+  configure_flags << 'no-psk' << 'no-3des' << 'no-srp' unless platform.is_windows?
+
   if settings[:runtime_project] == 'agent'
     configure_flags.concat([
-       'no-weak-ssl-ciphers',
        'no-dtls',
        'no-dtls1',
        'no-idea',
        'no-seed',
        'no-ssl2-method',
+       'no-weak-ssl-ciphers',
        '-DOPENSSL_NO_HEARTBEATS',
     ])
   elsif settings[:runtime_project] == 'pdk'
     configure_flags.concat([
-      'enable-seed',
       'enable-cms',
-      'no-rc5',
-      'no-gost',
-      'no-srp',
+      'enable-seed',
     ])
   end
 
