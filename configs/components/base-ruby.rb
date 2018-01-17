@@ -1,6 +1,6 @@
 # This file is a basis for multiple ruby versions.
 # It should not be included as a component; Instead other components should
-# load it with instance_eval. See ruby-2.1.9.rb and ruby-2.4.2.rb configs.
+# load it with instance_eval. See ruby-2.1.9.rb and ruby-2.4.3.rb configs.
 
 # Condensed version, e.g. '2.4.3' -> '243'
 ruby_version_condensed = settings[:ruby_version].tr('.', '')
