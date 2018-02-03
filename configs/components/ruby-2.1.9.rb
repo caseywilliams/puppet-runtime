@@ -116,15 +116,15 @@ component "ruby-2.1.9" do |pkg, settings, platform|
   # ENVIRONMENT, FLAGS
   ####################
 
-  special_flags = " --prefix=#{settings[:prefix]} --with-opt-dir=#{settings[:prefix]} "
+  special_flags = " --prefix=#{settings[:ruby_dir]} --with-opt-dir=#{settings[:prefix]} "
 
   if platform.is_aix?
     # This normalizes the build string to something like AIX 7.1.0.0 rather
     # than AIX 7.1.0.2 or something
     special_flags += " --build=#{settings[:platform_triple]} "
-  elsif platform.is_solaris? && platform.architecture == "sparc"
-    special_flags += " --with-baseruby=#{settings[:host_ruby]} "
   elsif platform.is_cross_compiled_linux?
+    special_flags += " --with-baseruby=#{settings[:host_ruby]} "
+  elsif platform.is_solaris? && platform.architecture == "sparc"
     special_flags += " --with-baseruby=#{settings[:host_ruby]} "
   elsif platform.is_windows?
     special_flags = " CPPFLAGS='-DFD_SETSIZE=2048' debugflags=-g --prefix=#{settings[:ruby_dir]} --with-opt-dir=#{settings[:prefix]} "
@@ -146,38 +146,5 @@ component "ruby-2.1.9" do |pkg, settings, platform|
         #{settings[:host]} \
         #{special_flags}"
      ]
-  end
-
-  #########
-  # INSTALL
-  #########
-
-  if platform.is_cross_compiled_linux? || platform.is_solaris? || platform.is_aix?
-    # Here we replace the rbconfig from our ruby compiled with our toolchain
-    # with an rbconfig from a ruby of the same version compiled with the system
-    # gcc. Without this, the rbconfig will be looking for a gcc that won't
-    # exist on a user system and will also pass flags which may not work on
-    # that system.
-    # We also disable a safety check in the rbconfig to prevent it from being
-    # loaded from a different ruby, because we're going to do that later to
-    # install compiled gems.
-    #
-    # On AIX we build everything using our own GCC. This means that gem
-    # installing a compiled gem would not work without us shipping that gcc.
-    # This tells the ruby setup that it can use the default system gcc rather
-    # than our own.
-    target_dir = File.join(settings[:libdir], "ruby", "2.1.0", rbconfig_info[settings[:platform_triple]][:target_double])
-    sed = "sed"
-    sed = "gsed" if platform.is_solaris?
-    sed = "/opt/freeware/bin/sed" if platform.is_aix?
-
-    pkg.install do
-      [
-        "#{sed} -i 's|raise|warn|g' #{target_dir}/rbconfig.rb",
-        "mkdir -p #{settings[:datadir]}/doc",
-        "cp #{target_dir}/rbconfig.rb #{settings[:datadir]}/doc",
-        "cp ../rbconfig-#{settings[:platform_triple]}.rb #{target_dir}/rbconfig.rb",
-      ]
-    end
   end
 end
