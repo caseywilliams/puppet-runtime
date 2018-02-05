@@ -1,10 +1,14 @@
 component 'augeas' do |pkg, settings, platform|
-  pkg.version '1.8.1'
-  pkg.md5sum '623ff89d71a42fab9263365145efdbfa'
+  pkg.version '1.10.1'
+  pkg.md5sum '6c0b2ea6eec45e8bc374b283aedf27ce'
   pkg.url "#{settings[:buildsources_url]}/augeas-#{pkg.get_version}.tar.gz"
 
   if platform.is_sles? && platform.os_version == '10'
     pkg.apply_patch 'resources/patches/augeas/augeas-1.2.0-fix-services-sles10.patch'
+  end
+
+  if platform.is_solaris? && platform.os_version == '10' && platform.architecture == 'sparc'
+    pkg.add_source 'file://resources/patches/augeas/augeas-gnulib-pthread-in-use.patch'
   end
 
   pkg.build_requires "libxml2"
@@ -74,6 +78,14 @@ component 'augeas' do |pkg, settings, platform|
 
   pkg.configure do
     ["./configure --prefix=#{settings[:prefix]} #{settings[:host]}"]
+  end
+
+  if platform.is_solaris? && platform.os_version == '10' && platform.architecture == 'sparc'
+    # Augeas builds its own gnulib
+    # This patch to gnulib fixes a linking error around symbol versioning in pthread
+    pkg.configure do
+      ["/usr/bin/gpatch -p0 < ../augeas-gnulib-pthread-in-use.patch"]
+    end
   end
 
   pkg.build do
