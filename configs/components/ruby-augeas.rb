@@ -7,6 +7,10 @@ component "ruby-augeas" do |pkg, settings, platform|
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires "augeas"
 
+  if platform.name =~ /^el-5-.*$/
+    pkg.build_requires 'ruby-selinux'
+  end
+
   pkg.environment "PATH", "$(PATH):/opt/pl-build-tools/bin:/usr/local/bin:/opt/csw/bin:/usr/ccs/bin:/usr/sfw/bin"
   if platform.is_aix?
     pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/pkg-config-0.19-6.aix5.2.ppc.rpm"
