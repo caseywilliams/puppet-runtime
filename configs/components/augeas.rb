@@ -1,6 +1,6 @@
 component 'augeas' do |pkg, settings, platform|
-  pkg.version '1.8.1'
-  pkg.md5sum '623ff89d71a42fab9263365145efdbfa'
+  pkg.version '1.10.1'
+  pkg.md5sum '6c0b2ea6eec45e8bc374b283aedf27ce'
   pkg.url "#{settings[:buildsources_url]}/augeas-#{pkg.get_version}.tar.gz"
 
   if platform.is_sles? && platform.os_version == '10'
