@@ -29,22 +29,16 @@ proj.setting(:buildsources_url, "#{proj.artifactory_url}/generic/buildsources")
 if platform.is_windows?
   proj.setting(:company_id, "PuppetLabs")
   proj.setting(:product_id, "Puppet")
-
   if platform.architecture == "x64"
     proj.setting(:base_dir, "ProgramFiles64Folder")
   else
     proj.setting(:base_dir, "ProgramFilesFolder")
   end
-
-  # Directory IDs
-  proj.setting(:bindir_id, "bindir")
-
   # We build for windows not in the final destination, but in the paths that correspond
   # to the directory ids expected by WIX. This will allow for a portable installation (ideally).
   proj.setting(:install_root, File.join("C:", proj.base_dir, proj.company_id, proj.product_id))
   proj.setting(:sysconfdir, File.join("C:", "CommonAppDataFolder", proj.company_id))
   proj.setting(:tmpfilesdir, "C:/Windows/Temp")
-  proj.setting(:service_dir, File.join(proj.install_root, "service"))
   proj.setting(:windows_tools, File.join(proj.install_root, "sys/tools/bin"))
 else
   proj.setting(:install_root, "/opt/puppetlabs")
@@ -63,8 +57,6 @@ end
 
 proj.setting(:miscdir, File.join(proj.install_root, "misc"))
 proj.setting(:prefix, File.join(proj.install_root, "puppet"))
-proj.setting(:puppet_configdir, File.join(proj.sysconfdir, 'puppet'))
-proj.setting(:puppet_codedir, File.join(proj.sysconfdir, 'code'))
 proj.setting(:bindir, File.join(proj.prefix, "bin"))
 proj.setting(:link_bindir, File.join(proj.install_root, "bin"))
 proj.setting(:includedir, File.join(proj.prefix, "include"))
