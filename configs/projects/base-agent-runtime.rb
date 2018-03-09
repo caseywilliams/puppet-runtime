@@ -164,7 +164,7 @@ if platform.is_windows?
   proj.setting(:cygwin, "nodosfilewarning winsymlinks:native")
 end
 
-if platform.is_osx?
+if platform.is_macos?
   # For OS X, we should optimize for an older architecture than Apple
   # currently ships for; there's a lot of older xeon chips based on
   # that architecture still in use throughout the Mac ecosystem.
@@ -180,16 +180,17 @@ if platform.is_aix?
   proj.setting(:ldflags, "-Wl,-brtl -L#{proj.libdir} -L/opt/pl-build-tools/lib")
 end
 
-
-########
-# Common components for all versions of puppet-agent
-########
-
 if platform.is_solaris?
   proj.identifier 'puppetlabs.com'
 elsif platform.is_macos?
   proj.identifier 'com.puppetlabs'
 end
+
+proj.timeout 7200 if platform.is_windows?
+
+########
+# Common components for all versions of puppet-agent
+########
 
 # Common components required by all agent branches
 proj.component 'runtime-agent'
@@ -248,5 +249,3 @@ proj.directory proj.piddir unless platform.is_windows?
 if platform.is_windows? || platform.is_macos?
   proj.directory proj.bindir
 end
-
-proj.timeout 7200 if platform.is_windows?
