@@ -27,34 +27,14 @@ proj.setting(:buildsources_url, "#{proj.artifactory_url}/generic/buildsources")
 ########
 
 if platform.is_windows?
-  proj.setting(:company_name, "Puppet Inc")
-  proj.setting(:pl_company_name, "Puppet Labs")
   proj.setting(:company_id, "PuppetLabs")
-  proj.setting(:common_product_id, "PuppetInstaller")
-  proj.setting(:puppet_service_name, "puppet")
   proj.setting(:product_id, "Puppet")
-  proj.setting(:upgrade_code, "2AD3D11C-61B3-4710-B106-B4FDEC5FA358")
+
   if platform.architecture == "x64"
-    proj.setting(:product_name, "Puppet Agent (64-bit)")
-    proj.setting(:win64, "yes")
     proj.setting(:base_dir, "ProgramFiles64Folder")
-    proj.setting(:RememberedInstallDirRegKey, "RememberedInstallDir64")
   else
-    proj.setting(:product_name, "Puppet Agent")
-    proj.setting(:win64, "no")
     proj.setting(:base_dir, "ProgramFilesFolder")
-    proj.setting(:RememberedInstallDirRegKey, "RememberedInstallDir")
   end
-  # TODO: can we get rid of these?
-  proj.setting(:links, {
-      HelpLink: "http://puppet.com/services/customer-support",
-      CommunityLink: "http://puppet.com/community",
-      ForgeLink: "http://forge.puppet.com",
-      NextStepLink: "https://docs.puppet.com/pe/latest/quick_start_install_agents_windows.html",
-      ManualLink: "https://docs.puppet.com/puppet/latest/reference",
-  })
-  proj.setting(:UI_exitdialogtext, "Manage your first resources on this node, explore the Puppet community and get support using the shortcuts in the Documentation folder of your Start Menu.")
-  proj.setting(:LicenseRTF, "wix/license/LICENSE.rtf")
 
   # Directory IDs
   proj.setting(:bindir_id, "bindir")
