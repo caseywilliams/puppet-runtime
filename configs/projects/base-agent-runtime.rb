@@ -28,7 +28,6 @@ end
 
 # Common components required by all agent branches
 proj.component 'runtime-agent'
-proj.component 'openssl'
 proj.component 'curl'
 proj.component 'puppet-ca-bundle'
 proj.component "ruby-#{proj.ruby_version}"
@@ -40,6 +39,14 @@ proj.component 'ruby-shadow' unless platform.is_aix? || platform.is_windows?
 # We only build ruby-selinux for EL 5-7
 if platform.name =~ /^el-(5|6|7)-.*/ || platform.is_fedora?
   proj.component 'ruby-selinux'
+end
+
+if platform.name =~ /^redhat-fips-7-.*/
+  # Link against the system openssl instead of our vendored version:
+  proj.setting(:vendor_openssl, false)
+else
+  proj.setting(:vendor_openssl, true)
+  proj.component 'openssl'
 end
 
 # libedit is used instead of readline on these platforms

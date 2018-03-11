@@ -1,13 +1,17 @@
 component "puppet-ca-bundle" do |pkg, settings, platform|
   pkg.load_from_json("configs/components/puppet-ca-bundle.json")
 
-  pkg.build_requires "openssl"
+  if settings[:vendor_openssl]
+    pkg.build_requires 'openssl'
+  else
+    pkg.build_requires 'openssl-devel'
+  end
 
-  openssl_cmd = "#{settings[:bindir]}/openssl"
-
-  if platform.is_cross_compiled_linux?
-    # Use the build host's openssl command, not our cross-compiled one
-    openssl_cmd = "/usr/bin/openssl"
+  if platform.is_cross_compiled_linux? || !settings[:vendor_openssl]
+    # Use the build host's openssl command, not our cross-compiled or vendored one
+    openssl_cmd = '/usr/bin/openssl'
+  else
+    openssl_cmd = "#{settings[:bindir]}/openssl"
   end
 
   install_commands = [
