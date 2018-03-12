@@ -6,7 +6,7 @@ project 'agent-runtime-1.10.x' do |proj|
   proj.setting :rubygem_ffi_version, '1.9.14'
 
   # Common agent settings:
-  instance_eval File.read('configs/projects/base-agent-runtime.rb')
+  instance_eval File.read(File.join(File.dirname(__FILE__), 'base-agent-runtime.rb'))
 
   proj.version proj.settings[:package_version]
 
