@@ -109,6 +109,9 @@ component "boost" do |pkg, settings, platform|
     # Make the windows settings match the *nix settings:
     addtl_flags = "variant=release threading=multi link=shared,static runtime-link=shared address-model=#{arch}"
 
+    # Also explicitly set the Windows API to match leatherman's settings (Windows Vista+)
+    addtl_flags += " define=WINVER=0x0600 define=_WIN32_WINNT=0x0600"
+
     # We don't have iconv available on windows yet
     addtl_flags += " boost.locale.iconv=off"
   elsif platform.is_aix?
