@@ -102,6 +102,11 @@ component "boost" do |pkg, settings, platform|
     # we need to make sure we link against non-cygwin libraries
     execute = "cmd.exe /c "
 
+    # The default build style used by jam is 'minimal', which builds both
+    # static and dynamic libraries on *nix systems, but only static on Windows.
+    # Switch to a 'complete' build, which is more consistent across platforms
+    b2flags = "#{b2flags} --build-type=complete"
+
     gpp = "C:/tools/mingw#{arch}/bin/g++"
 
     # We don't have iconv available on windows yet
