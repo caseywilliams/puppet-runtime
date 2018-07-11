@@ -107,10 +107,8 @@ component "boost" do |pkg, settings, platform|
     # The default build style used by jam is 'minimal', which builds both
     # static and dynamic libraries on *nix systems, but only static on Windows.
     # Make the windows settings match the *nix settings:
-    addtl_flags = "variant=release threading=multi link=shared,static runtime-link=shared address-model=#{arch}"
-
-    # Also explicitly set the Windows API to match leatherman's settings (Windows Vista+)
-    addtl_flags += " define=WINVER=0x0600 define=_WIN32_WINNT=0x0600"
+    addtl_flags = "variant=release threading=multi link=shared runtime-link=shared address-model=#{arch}"
+    b2flags = "#{b2flags} --layout=system"
 
     # We don't have iconv available on windows yet
     addtl_flags += " boost.locale.iconv=off"
