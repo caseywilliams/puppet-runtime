@@ -73,14 +73,15 @@ component "boost" do |pkg, settings, platform|
   gpp = "#{settings[:tools_root]}/bin/g++"
   b2flags = ""
   b2location = "#{settings[:prefix]}/bin/b2"
+  bjamlocation = "#{settings[:prefix]}/bin/bjam"
 
   if platform.is_cross_compiled_linux?
-    pkg.environment "PATH" => "/opt/pl-build-tools/bin:$$PATH"
+    pkg.environment "PATH", "/opt/pl-build-tools/bin:$(PATH)"
     linkflags = "-Wl,-rpath=#{settings[:libdir]}"
     gpp = "/opt/pl-build-tools/bin/#{settings[:platform_triple]}-g++"
   elsif platform.is_macos?
-    pkg.environment "PATH" => "/opt/pl-build-tools/bin:$$PATH"
-    linkflags = ""
+    pkg.environment "PATH", "/opt/pl-build-tools/bin:$(PATH)"
+    linkflags = "-Wl,-rpath,#{settings[:libdir]}"
     gpp = "clang++"
     toolset = 'gcc'
     with_toolset = "--with-toolset=clang"
@@ -97,6 +98,7 @@ component "boost" do |pkg, settings, platform|
     pkg.environment "PATH" => "C:/tools/mingw#{arch}/bin:$$PATH"
     pkg.environment "CYGWIN" => "nodosfilewarning"
     b2location = "#{settings[:prefix]}/bin/b2.exe"
+    bjamlocation = "#{settings[:prefix]}/bin/bjam.exe"
     # bootstrap.bat does not take the `--with-toolset` flag
     toolset = "gcc"
     with_toolset = ""
@@ -132,7 +134,7 @@ component "boost" do |pkg, settings, platform|
   if platform.is_windows?
     userconfigjam = %Q{using gcc : : #{gpp} ;}
   else
-    if platform.architecture =~ /arm|s390x/ || platform.is_aix?
+    if platform.architecture =~ /arm|s390x|ppc/ || platform.is_aix?
       userconfigjam = %Q{using gcc : 5.2.0 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
     else
       userconfigjam = %Q{using gcc : 4.8.2 : #{gpp} : <linkflags>"#{linkflags}" <cflags>"#{cflags}" <cxxflags>"#{cxxflags}" ;}
@@ -165,6 +167,7 @@ component "boost" do |pkg, settings, platform|
 
   pkg.install do
     [
+      "rm -f #{bjamlocation}",  # bjam is built for the host OS; On some xcc'd platforms it will blow up the install
       "#{b2location} \
       install \
       variant=release \
