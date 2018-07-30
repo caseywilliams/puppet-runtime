@@ -154,6 +154,7 @@ component "boost" do |pkg, settings, platform|
   # libraries and binaries, and how it tries to find them.
   pkg.build do
     [
+      "rm -rf /usr/lib64/libstdc++*",
       %Q{echo '#{userconfigjam}' > ~/user-config.jam},
       "cd tools/build",
       "#{execute}bootstrap#{bootstrap_suffix} #{with_toolset}",
@@ -177,7 +178,7 @@ component "boost" do |pkg, settings, platform|
       link=shared \
       toolset=#{toolset} \
       #{b2flags} \
-      -d+2 \
+      -d+2 -q \
       --debug-configuration \
       --prefix=#{settings[:prefix]} \
       --build-dir=. \
