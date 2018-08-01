@@ -70,11 +70,6 @@ elsif platform.is_aix?
 elsif platform.is_solaris?
   pkg.build_requires "runtime-#{settings[:runtime_project]}"
   pkg.build_requires 'libedit'
-  if platform.architecture == 'sparc'
-    if platform.os_version == '11'
-      pkg.build_requires 'pl-ruby'
-    end
-  end
 elsif platform.is_cross_compiled_linux?
   pkg.build_requires "runtime-#{settings[:runtime_project]}"
   pkg.build_requires 'pl-ruby'
