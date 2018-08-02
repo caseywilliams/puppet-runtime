@@ -10,9 +10,7 @@ component "yaml-cpp" do |pkg, settings, platform|
   elsif platform.is_windows?
     pkg.build_requires "pl-toolchain-#{platform.architecture}"
     pkg.build_requires "cmake"
-  elsif platform.is_macos?
-    pkg.build_requires "cmake"
-  elsif platform.is_aix? || platform.is_el? || platform.is_deb? || platform.is_solaris?
+  elsif platform.is_aix? || platform.is_el? || platform.is_deb? || platform.is_solaris? || platform.is_macos?
     # Moved to platform def, do nothing
   else
     pkg.build_requires "pl-gcc"

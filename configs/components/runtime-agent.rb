@@ -3,7 +3,7 @@ component "runtime-agent" do |pkg, settings, platform|
   pkg.environment "PROJECT_SHORTNAME", "puppet"
   pkg.add_source "file://resources/files/runtime/runtime.sh"
 
-  if platform.is_el? || platform.is_deb? || platform.is_solaris?
+  if platform.is_el? || platform.is_deb? || platform.is_solaris? || platform.is_macos?
     # do nothing, build requirements come from platform files
   elsif platform.is_cross_compiled_linux? || platform.name =~ /solaris-11/
     pkg.build_requires "pl-binutils-#{platform.architecture}"
