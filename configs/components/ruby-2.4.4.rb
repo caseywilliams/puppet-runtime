@@ -8,7 +8,7 @@ component 'ruby-2.4.4' do |pkg, settings, platform|
 
   # Cross-compiles require a hand-built rbconfig from the target system as does Solaris, AIX and Windies
   if platform.is_cross_compiled_linux? || platform.is_solaris? || platform.is_aix? || platform.is_windows?
-    pkg.add_source "file://resources/files/ruby_#{ruby_version_condensed}/rbconfig/rbconfig-#{ruby_version_condensed}-#{settings[:platform_triple]}.rb"
+    pkg.add_source "file://resources/files/ruby_244/rbconfig/rbconfig-244-#{settings[:platform_triple]}.rb"
   end
 
   ###########
